@@ -15,7 +15,7 @@ app.post('/api/login', async (req, res) => {
     try {
         const response = await axios.post('https://oauth2.googleapis.com/token', { // exchanging the authorization code for a token
           'code': code,
-          'client_id': '145780615357-3qqh0fjm48r5t2af090fjdpqi7dl9s40.apps.googleusercontent.com',
+          'client_id': process.env.CLIENT_ID,
           'client_secret': process.env.CLIENT_SECRET,
           'redirect_uri': 'http://localhost:3000/callback',
           'grant_type': 'authorization_code'
