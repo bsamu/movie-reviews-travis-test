@@ -12,6 +12,9 @@ const movieRoutes = require('./route/movie');
 const userRoutes = require('./route/user');
 const Review = require('./models/review');
 
+//middleware functions
+const checkSession = require('./middlewares/checkSession')
+
 app.use(cors());
 app.use(express.json());
 
@@ -43,7 +46,7 @@ app.post('/api/login', async (req, res) => {
     res.json(sessionToken);
 })
 
-app.post('/api/reviews/add', async (req, res) => { //adding a new review
+app.post('/api/reviews/add', checkSession(), async (req, res) => { //adding a new review
     const { token, movieId, content, rating } = req.body
     console.log(`token is`, token)
     if (!token) return res.sendStatus(401); //if we don't have a token, the user is not authorized yet
