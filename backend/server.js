@@ -10,6 +10,7 @@ const mongoose = require('mongoose');
 // const loginRoutes = require('./route/login');
 const movieRoutes = require('./route/movie');
 const userRoutes = require('./route/user');
+const Review = require('./models/review');
 
 app.use(cors());
 app.use(express.json());
@@ -53,6 +54,17 @@ app.post('/api/reviews/add', async (req, res) => { //adding a new review
     console.log(`
     new review by: ${decoded.id}, about the movie: ${movieId}. review content: ${content}. rating: ${rating}. this should now be pushed into the mongo db
     `)
+
+    const review = Review({
+        movie: movieId,
+        user: decoded.id,
+        content: content,
+        rating: rating
+    });
+
+    review.save(() => {
+        res.send(review);
+    });
 })
 
 // app.listen(port, () => {
