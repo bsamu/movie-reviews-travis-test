@@ -10,7 +10,6 @@ const Review = () => {
 
   return (
     <div>
-      <Navbar />
       <button
         onClick={() =>
           axios.post("http://localhost:4000/api/reviews/add", {
