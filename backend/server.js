@@ -4,10 +4,20 @@ const app = express();
 const cors = require('cors');
 const axios = require('axios');
 const jwt = require('jsonwebtoken');
-const port = 4000;
+const port = process.env.PORT || 4000;
+const mongoose = require('mongoose');
+
+// const loginRoutes = require('./route/login');
+const movieRoutes = require('./route/movie');
+const userRoutes = require('./route/user');
+const Review = require('./models/review');
 
 app.use(cors());
 app.use(express.json());
+
+// app.use('/api/login', loginRoutes);
+app.use('/api/movie', movieRoutes);
+app.use('/api/user', userRoutes);
 
 app.post('/api/login', async (req, res) => {
     const code = req.body.code; //finding the authorization code sent by the frontend
@@ -34,7 +44,7 @@ app.post('/api/login', async (req, res) => {
 })
 
 app.post('/api/reviews/add', async (req, res) => { //adding a new review
-    const {token, movieId, content, rating} = req.body
+    const { token, movieId, content, rating } = req.body
     console.log(`token is`, token)
     if (!token) return res.sendStatus(401); //if we don't have a token, the user is not authorized yet
 
@@ -44,8 +54,27 @@ app.post('/api/reviews/add', async (req, res) => { //adding a new review
     console.log(`
     new review by: ${decoded.id}, about the movie: ${movieId}. review content: ${content}. rating: ${rating}. this should now be pushed into the mongo db
     `)
+
+    const review = Review({
+        movie: movieId,
+        user: decoded.id,
+        content: content,
+        rating: rating
+    });
+
+    review.save(() => {
+        res.send(review);
+    });
 })
 
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
-})
+// app.listen(port, () => {
+//     console.log(`Example app listening on port ${port}`)
+// })
+
+mongoose.connect(process.env.CONNECTION_STRING, () => {
+    console.log("MongoDB connected using Mongoose.");
+
+    app.listen(process.env.PORT, () => {
+        console.log(`Listening at localhost: ${process.env.PORT}...`)
+    });
+}, e => console.error(e));
