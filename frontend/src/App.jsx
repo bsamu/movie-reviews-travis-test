@@ -17,15 +17,15 @@ const Login = () => {
     const response = await axios.post("http://localhost:4000/api/login", {
       code, //sending the authorization code to the backend
     });
-    console.log(response);
-    sessionStorage.setItem("token", response.data);
+    console.log(response); //the response should be a jwt token signed by our own backend, containing at least a userId
+    sessionStorage.setItem("token", response.data); // saving the token to the sessionstorage
   };
 
   useEffect(() => {
     getToken();
   }, []);
 
-  return <div>LOGIN</div>;
+  return <div>LOGIN FLOW COMPLETE</div>;
 };
 
 const Home = () => {
