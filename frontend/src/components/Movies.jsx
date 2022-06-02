@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
+import ReactStars from "react-rating-stars-component";
 const axios = require("axios");
 
 const Movies = () => {
@@ -7,7 +8,7 @@ const Movies = () => {
   const [page, setPage] = useState(1);
   const [reviewContent, setReviewContent] = useState("")
   const token = sessionStorage.getItem("token");
-  const [rating, setRating] = useState(5);
+  const [rating, setRating] = useState(0);
 
   const getData = async () => {
     const resp = await axios.get(
@@ -17,7 +18,12 @@ const Movies = () => {
     setDataList(resp.data.results);
   };
 
+  const changeRating = (newRating)=>{
+  setRating(newRating)
+  }
+
   const sendUserReview = async(dataId, dataTitle)=>{
+  
     try {
       const resp = await axios.post("http://localhost:4000/api/reviews/add", {
       token,
@@ -50,6 +56,7 @@ const Movies = () => {
           />
           <p>Release date: {data.release_date}</p>
           <div>
+            <ReactStars count={5} onChange={changeRating} size={24} activeColor="#ffd700" />
             <textarea type="text" placeholder="Write your review here" value={reviewContent} onChange={(event)=> setReviewContent(event.target.value)}></textarea>
           </div>
           <button onClick={() => sendUserReview(data.id, data.original_title)}> Send your review</button>
