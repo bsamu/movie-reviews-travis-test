@@ -3,7 +3,6 @@ import { Routes, Route, useSearchParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
 import Review from "./components/Review";
-import ReactPaginate from "react-paginate";
 
 const axios = require("axios");
 
