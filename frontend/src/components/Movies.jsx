@@ -1,4 +1,3 @@
-import Navbar from "./Navbar";
 import { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
 const axios = require("axios");
@@ -21,7 +20,6 @@ const Movies = () => {
 
   return (
     <div>
-      <Navbar />
       <h1>Movies</h1>
       {dataList.map((data) => (
         <div>
