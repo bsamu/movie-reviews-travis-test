@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import ReactStars from "react-rating-stars-component";
 
 const axios = require("axios");
 
@@ -24,7 +24,7 @@ const Review = () => {
     <div>
       <div>
         <h1>My reviews</h1>
-        {myReviews.map(review => <div><p>Movie title: {review.movie_title}</p><p> My rating: {review.rating}</p><p>My review: {review.content}</p></div>)}
+        {myReviews.map(review => <div><p>Movie title: {review.movie_title}</p><p> My rating: <ReactStars edit={false} value={review.rating}/></p><p>My review: {review.content}</p></div>)}
       </div>
      
     </div>
