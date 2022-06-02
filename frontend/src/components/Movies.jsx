@@ -5,6 +5,9 @@ const axios = require("axios");
 const Movies = () => {
   const [dataList, setDataList] = useState([]);
   const [page, setPage] = useState(1);
+  const [reviewContent, setReviewContent] = useState("")
+  const token = sessionStorage.getItem("token");
+  const [rating, setRating] = useState(5);
 
   const getData = async () => {
     const resp = await axios.get(
@@ -13,6 +16,21 @@ const Movies = () => {
     console.log(resp.data);
     setDataList(resp.data.results);
   };
+
+  const sendUserReview = async(dataId, dataTitle)=>{
+    try {
+      const resp = await axios.post("http://localhost:4000/api/reviews/add", {
+      token,
+      movieId: dataId,
+      movieTitle: dataTitle,
+      content: reviewContent,
+      rating,
+    })
+    setReviewContent("")
+    } catch (error) {
+
+    }
+  }
 
   useEffect(() => {
     getData();
@@ -31,6 +49,10 @@ const Movies = () => {
             srcset=""
           />
           <p>Release date: {data.release_date}</p>
+          <div>
+            <textarea type="text" placeholder="Write your review here" value={reviewContent} onChange={(event)=> setReviewContent(event.target.value)}></textarea>
+          </div>
+          <button onClick={() => sendUserReview(data.id, data.original_title)}> Send your review</button>
         </div>
       ))}
       <div className="page-select-container">
